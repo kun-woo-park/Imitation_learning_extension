@@ -24,7 +24,6 @@ AoA0 = -1.71*Deg2Rad     # zero lift angle of attack
 Acc2AoA = 0.308333*Deg2Rad  # 1m/s^2 ACC corresponds to 0.308333deg AOA
 zeta_ap = 0.7         # pitch acceleration loop damping
 omega_ap = 4          # pitch acceleration loop bandwidth
-dist_sep = 100        # near mid-air collision range
 Vm_start = 2        # beginning point of vm range
 Vm_end = 50         # end point of vm range
 Vt_start = 2        # beginning point of vt range
@@ -71,10 +70,11 @@ def data_gen():
     N = len(t)
     loop_continue = 1
     while loop_continue == 1:
-        hm0 = 1000                                                     # initial altitude
+        hm0 = 1000                                                         # initial altitude
         Vm = np.random.randint(Vm_start, Vm_end)                           # initial speed
         Vt = np.random.randint(Vt_start, Vt_end)                           # initial speed
-        # initial flight path angle
+        dist_sep = (Vm + Vt)*3                                             # near mid-air collision range (avoidance finished about 10 secs)
+        # initial flight path angle                                                                       (based on assumption pitch angle is up to 30 degree)
         gamma0 = 0*Deg2Rad
         # initial NED position
         Pm_NED = np.array([30*Vt - 30*Vm, 0, -hm0])
@@ -86,7 +86,7 @@ def data_gen():
                       )       # initial state vector
 
         # target initial conditions
-        ht0 = 1000 + 100*np.random.randn()
+        ht0 = 1000 + dist_sep*0.7*np.random.randn()
         approach_angle = 180*Deg2Rad*(2*np.random.rand()-1)
         psi0 = np.pi + approach_angle + 2*np.random.randn()*Deg2Rad
         psi0 = np.arctan2(np.sin(psi0), np.cos(psi0))
@@ -222,10 +222,10 @@ def data_gen():
                     if zem_v2 < dist_sep:
                         if np.abs(crm_v2) < dist_sep:
                             if (zem_h2 < dist_sep):
-                                if hdot_cmd != -20:
+                                if hdot_cmd != -int(dist_sep/15):
                                     count_change_hdot += 1
 
-                                hdot_cmd = -20
+                                hdot_cmd = -int(dist_sep/15)
                             else:
                                 hdot_cmd = 0
                         else:
@@ -234,17 +234,17 @@ def data_gen():
                         if np.abs(crm_v2) > dist_sep:
                             hdot_cmd = 0
                         else:
-                            if hdot_cmd != -20:
+                            if hdot_cmd != -int(dist_sep/15):
                                 count_change_hdot += 1
-                            hdot_cmd = -20
+                            hdot_cmd = -int(dist_sep/15)
                 else:
                     if zem_v2 > -dist_sep:
                         if np.abs(crm_v2) < dist_sep:
                             if zem_h2 < dist_sep:
-                                if hdot_cmd != 20:
+                                if hdot_cmd != int(dist_sep/15):
                                     count_change_hdot += 1
 
-                                hdot_cmd = 20
+                                hdot_cmd = int(dist_sep/15)
                             else:
                                 hdot_cmd = 0
                         else:
@@ -253,9 +253,9 @@ def data_gen():
                         if np.abs(crm_v2) > dist_sep:
                             hdot_cmd = 0
                         else:
-                            if hdot_cmd != 20:
+                            if hdot_cmd != int(dist_sep/15):
                                 count_change_hdot += 1
-                            hdot_cmd = 20
+                            hdot_cmd = int(dist_sep/15)
                 if k == stop_point:
                     # WRITE DATA
                     loop_continue = 0
