@@ -24,10 +24,10 @@ AoA0 = -1.71*Deg2Rad     # zero lift angle of attack
 Acc2AoA = 0.308333*Deg2Rad  # 1m/s^2 ACC corresponds to 0.308333deg AOA
 zeta_ap = 0.7         # pitch acceleration loop damping
 omega_ap = 4          # pitch acceleration loop bandwidth
-Vm_start = 2        # beginning point of vm range
-Vm_end = 50         # end point of vm range
-Vt_start = 2        # beginning point of vt range
-Vt_end = 50         # end point of vmtrange
+Vm_start = 1        # beginning point of vm range
+Vm_end = 5         # end point of vm range
+Vt_start = 1        # beginning point of vt range
+Vt_end = 5         # end point of vmtrange
 
 def work(number_of_loops, result_queue):
     work_result = uni_data_generator(number_of_loops)
@@ -73,7 +73,7 @@ def data_gen():
         hm0 = 1000                                                         # initial altitude
         Vm = np.random.randint(Vm_start, Vm_end)                           # initial speed
         Vt = np.random.randint(Vt_start, Vt_end)                           # initial speed
-        dist_sep = (Vm + Vt)*3                                             # near mid-air collision range (avoidance finished about 10 secs)
+        dist_sep = (Vm + Vt)*2                                             # near mid-air collision range (avoidance finished about 10 secs)
         # initial flight path angle                                                                       (based on assumption pitch angle is up to 30 degree)
         gamma0 = 0*Deg2Rad
         # initial NED position
