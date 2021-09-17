@@ -255,11 +255,11 @@ def data_gen():
                 break
 
     if hdot_cmd == -int(dist_sep/15):
-        hdot_cmd_ = 1
+        hdot_cmd = 1
     if hdot_cmd == 0:
-        hdot_cmd_ = 0
+        hdot_cmd = 0
     if hdot_cmd == int(dist_sep/15):
-        hdot_cmd_ = 2
+        hdot_cmd = 2
     return [r, vc, azim, los, daz, dlos, hdot_cmd]
 
 
