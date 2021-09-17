@@ -300,7 +300,7 @@ def uni_data_generator(num_of_data):
 if __name__ == "__main__":
     num_workers = args.num_workers
     number_of_data = args.num_data
-    if os.path.exists('norm_data_train_uniform_ext_{:2d}.csv'.format(time.time())) is False:
+    if os.path.exists('norm_data_train_uniform_ext_{:2f}.csv'.format(time.time())) is False:
         # train data
         data = multiprocess_data_gen(num_workers, number_of_data)
         data.put("stop")
@@ -318,9 +318,9 @@ if __name__ == "__main__":
         np.save('std.npy', [_ for _ in std[:]])
         res[:, :6] = (res[:, :6]-mean)/(std)
         df = pd.DataFrame(res)
-        df.to_csv('norm_data_train_uniform_ext_{:2d}.csv'.format(time.time()), header=False, index=False)
+        df.to_csv('norm_data_train_uniform_ext_{:2f}.csv'.format(time.time()), header=False, index=False)
         print("Train data generation complete")
-    if os.path.exists('norm_data_test_uniform_ext_{:2d}.csv'.format(time.time())) is False:
+    if os.path.exists('norm_data_test_uniform_ext_{:2f}.csv'.format(time.time())) is False:
         # validation data
         data = multiprocess_data_gen(num_workers, int(number_of_data/10))
         data.put("stop")
@@ -338,5 +338,5 @@ if __name__ == "__main__":
         np.save('std_test.npy', [_ for _ in std[:]])
         res[:, :6] = (res[:, :6]-mean)/(std)
         df = pd.DataFrame(res)
-        df.to_csv('norm_data_test_uniform_ext_{:2d}.csv'.format(time.time()), header=False, index=False)
+        df.to_csv('norm_data_test_uniform_ext_{:2f}.csv'.format(time.time()), header=False, index=False)
         print("validation data generation complete")
