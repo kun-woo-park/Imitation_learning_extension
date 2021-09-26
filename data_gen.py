@@ -300,11 +300,6 @@ if __name__ == "__main__":
             else:
                 res = res + data_piece
         res = np.array(res)
-        mean = res.mean(axis=0)[:6]
-        std = res.std(axis=0)[:6]
-        np.save('mean.npy', [_ for _ in mean[:]])
-        np.save('std.npy', [_ for _ in std[:]])
-        res[:, :6] = (res[:, :6]-mean)/(std)
         df = pd.DataFrame(res)
         df.to_csv('norm_data_train_uniform_ext_{:2f}.csv'.format(time.time()), header=False, index=False)
         print("Train data generation complete")
@@ -320,11 +315,6 @@ if __name__ == "__main__":
             else:
                 res = res + data_piece
         res = np.array(res)
-        mean = res.mean(axis=0)[:6]
-        std = res.std(axis=0)[:6]
-        np.save('mean_test.npy', [_ for _ in mean[:]])
-        np.save('std_test.npy', [_ for _ in std[:]])
-        res[:, :6] = (res[:, :6]-mean)/(std)
         df = pd.DataFrame(res)
         df.to_csv('norm_data_test_uniform_ext_{:2f}.csv'.format(time.time()), header=False, index=False)
         print("validation data generation complete")
